@@ -1,0 +1,12 @@
+target/
+*.iml
+.idea/
+data/
+*.csv
+*.jar
+*version/
+/bin/
+/.classpath
+/.settings/
+/.project
+
