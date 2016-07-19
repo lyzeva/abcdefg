@@ -16,23 +16,26 @@ import static spark.SparkBase.staticFileLocation;
 public class Main {
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+        System.out.println("1");
         staticFileLocation("/public");
-        port(9091);
+        System.out.println("2");
+        port(9090);
+        System.out.println("3");
         get("/", index());
+        System.out.println("4");
         get("/correlationresult", getCorrelationResult());
+        System.out.println("5");
     }
 
     private static Route getCorrelationResult() {
-        // TODO Auto-generated method stub
         return new Route() {
 
             @Override
             public Object handle(Request request, spark.Response response) throws Exception {
-                // TODO Auto-generated method stub
+                System.out.println("correlation");
                 Config.fetchFromRequest(request);
                 // Correlation Result
-                CorrelationResultModel result = CorrelationTest.correlationTest();
+                CorrelationResultModel result = CorrelationTest.correlationTest(Config.starttime, Config.endtime);
 
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.deep(true);
@@ -49,8 +52,8 @@ public class Main {
 
             @Override
             public Object handle(Request request, spark.Response response) throws Exception {
-                // TODO Auto-generated method stub
                 response.redirect("/index.html");
+                System.out.println("Index");
                 return null;
             }
 
