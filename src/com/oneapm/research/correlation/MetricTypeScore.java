@@ -25,7 +25,9 @@ public class MetricTypeScore {
 	private int numOfMetric = 6;
 
 	public void initJDBC() throws SQLException {
-		System.out.println(Config.mysqlport);
+		System.out.println(Config.metricnamePath);
+
+		System.out.println(Config.metricdataPath);
 		metricnameConnection = new DataBaseConnection("mysql_driver", Config.mysqlipaddress, Config.mysqlport, Config.metricnamePath);
 		metricdataConnection = new DataBaseConnection("mysql_driver", Config.mysqlipaddress, Config.mysqlport, Config.metricdataPath);
 	}
