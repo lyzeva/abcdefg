@@ -32,7 +32,6 @@ public class Main {
 
             @Override
             public Object handle(Request request, spark.Response response) throws Exception {
-                System.out.println("correlation");
                 Config.fetchFromRequest(request);
                 // Correlation Result
                 CorrelationResultModel result = CorrelationTest.correlationTest(Config.starttime, Config.endtime);
