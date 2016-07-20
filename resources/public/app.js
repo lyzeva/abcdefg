@@ -108,7 +108,7 @@ Ext.application({
                                     xtype:"textfield",
                                     id:"applicationid",
                                     width:300,
-                                    value:"11"
+                                    value:"10"
                                },
 						       {
 						    	   xtype:"button",
