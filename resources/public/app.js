@@ -20,16 +20,16 @@ Ext.application({
 						       },
 						       {
 						    	   xtype:"textfield",
-						    	   id:"ChooseMetricName",
+						    	   id:"chooseMetricName",
 						    	   width:300,
-						    	   value:"CPU"
+						    	   value:"CPU/User Time"
 						       },{
                                    xtype:"label",
                                    text:"Choose TopN Correlation Series"
                                },
                                {
                                    xtype:"textfield",
-                                   id:"ChooseTopN",
+                                   id:"chooseTopN",
                                    width:300,
                                    value:"5"
                                },{
@@ -56,7 +56,7 @@ Ext.application({
 						       },
 						       {
 						    	   xtype:"textfield",
-						    	   id:"mysqlpath",
+						    	   id:"metricnamePath",
 						    	   width:300,
 						    	   value:"/metricname"
 						       },{
@@ -85,7 +85,7 @@ Ext.application({
 						       },
 						       {
 						    	   xtype:"textfield",
-						    	   id:"druidpath",
+						    	   id:"metricdataPath",
 						    	   width:300,
 						    	   //value:"/druid/v2"
 						    	   value:"/metricdata_pt1m"
@@ -124,14 +124,14 @@ Ext.application({
 													method : 'GET',
 													timeout:13000000,
 													params:{
-													    ChooseTopN:Ext.getCmp('ChooseTopN').value,
-														ChooseMetricName:Ext.getCmp('ChooseMetricName').value,
+													    chooseTopN:Ext.getCmp('chooseTopN').value,
+														chooseMetricName:Ext.getCmp('chooseMetricName').value,
 														mysqlipaddress:Ext.getCmp('mysqlipaddress').value,
 														mysqlport:Ext.getCmp('mysqlport').value,
-														mysqlpath:Ext.getCmp('mysqlpath').value,
+														metricnamePath:Ext.getCmp('metricnamePath').value,
 														druidipaddress:Ext.getCmp('druidipaddress').value,
 														druidport:Ext.getCmp('druidport').value,
-														druidpath:Ext.getCmp('druidpath').value,
+														metricdataPath:Ext.getCmp('metricdataPath').value,
 														withpasttimedata:Ext.getCmp('withpasttimedata').value,
 														applicationid:Ext.getCmp('applicationid').value
 													},

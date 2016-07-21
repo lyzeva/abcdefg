@@ -25,9 +25,6 @@ public class MetricTypeScore {
 	private int numOfMetric = 6;
 
 	public void initJDBC() throws SQLException {
-		System.out.println(Config.metricnamePath);
-
-		System.out.println(Config.metricdataPath);
 		metricnameConnection = new DataBaseConnection("mysql_driver", Config.mysqlipaddress, Config.mysqlport, Config.metricnamePath);
 		metricdataConnection = new DataBaseConnection("mysql_driver", Config.mysqlipaddress, Config.mysqlport, Config.metricdataPath);
 	}
@@ -51,7 +48,7 @@ public class MetricTypeScore {
 	
 	public void preparedPerThroughput() throws SQLException {
 		// WebTransaction
-		String selectMetricIdBaseline = "SELECT metric_id, metric_name from metric_name_entity_new where metric_name =" + metricName + " and application_id = " + applicationId;
+		String selectMetricIdBaseline = "SELECT metric_id, metric_name from metric_name_entity_new where metric_name =\"" + metricName + "\" and application_id = " + applicationId;
 
 		ResultSet resultMetricIdBaseline = metricnameConnection.getResultForSql(selectMetricIdBaseline);
 		

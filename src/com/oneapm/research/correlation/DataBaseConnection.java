@@ -16,7 +16,6 @@ public class DataBaseConnection {
         machineIp = ip;
         machinePort = port;
         machinePath = path;
-        System.out.println(machinePath);
         setConnection(driver);
     }
 
