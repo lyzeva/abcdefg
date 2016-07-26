@@ -1,8 +1,7 @@
 package com.oneapm.research.correlation;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 
 import com.oneapm.research.correlation.web.model.*;
 
@@ -16,21 +15,26 @@ public class CorrelationTest {
 
 
 	public static CorrelationResultModel correlationTest(String startTime,String endTime) {
+		boolean hasMetricName=false;
 		try {
 			metricTypeScore = new MetricTypeScore();
 			metricTypeScore.setStartTime(startTime);
 			metricTypeScore.setEndTime(endTime);
-			metricTypeScore.preparedPerThroughput();
+			hasMetricName = metricTypeScore.preparedPerThroughput();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		try{
+		if(hasMetricName) try{
 			currentResult=metricTypeScore.processing();
+			currentResult.outputToCsv("coefficient1.csv");
+			currentResult.sortList();
+			currentResult.outputToCsv("coefficient2.csv");
 		} catch(Exception e){
 			e.printStackTrace();
 		}
-		
+
+
 		metricTypeScore.closeConnection();
 
 		return currentResult;

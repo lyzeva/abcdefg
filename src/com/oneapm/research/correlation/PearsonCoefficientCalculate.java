@@ -1,6 +1,7 @@
 package com.oneapm.research.correlation;
 
-import java.util.ArrayList;  
+import java.util.ArrayList;
+import java.lang.Math;
 
 
 
@@ -63,6 +64,6 @@ public class PearsonCoefficientCalculate {
         for(int x=0;x<xSize;x++){  
             result+=(xList.get(x)-xAverage)*(yList.get(x)-yAverage);  
         }  
-        return result;  
+        return Math.abs(result);
     }
 }  

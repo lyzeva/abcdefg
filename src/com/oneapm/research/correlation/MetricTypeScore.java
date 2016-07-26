@@ -46,7 +46,7 @@ public class MetricTypeScore {
 
 	
 	
-	public void preparedPerThroughput() throws SQLException {
+	public boolean preparedPerThroughput() throws SQLException {
 		// WebTransaction
 		String selectMetricIdBaseline = "SELECT metric_id, metric_name from metric_name_entity_new where metric_name =\"" + metricName + "\" and application_id = " + applicationId;
 
@@ -54,12 +54,14 @@ public class MetricTypeScore {
 		
 		if(resultMetricIdBaseline.next()){
 			metricId = resultMetricIdBaseline.getString(1);
+			perThroughputBaseline = getDataFromDruid(Integer.parseInt(metricId)).get(0);
+			return true;
 		}
 		else{
 			System.out.println("There is not such a metric name.");
+			return false;
 		}
 		
-		perThroughputBaseline = getDataFromDruid(Integer.parseInt(metricId)).get(0);
 
 //		HashMap<Integer, String> mapBaseline = CanaryUtils.getMetricIdFromResultSet(resultMetricIdBaseline);
 	}
@@ -84,14 +86,10 @@ public class MetricTypeScore {
 				CorrelationTuple tuple = new CorrelationTuple();
 				tuple.metric_id = metricIdBaseline;
 				tuple.metric_name = key;
-				PearsonCoefficientCalculate.calculatePearson(perThroughputBaseline, baselineValue);
 				tuple.coefficient = PearsonCoefficientCalculate.calculatePearson(perThroughputBaseline, baselineValue);
 				correlationResultModel.result.add(tuple);
 			}
 		}
-//		outputToCsv
-//		TestCommon.outputToCsv(coefficient, metric_id, metric_name, key + ":baseline+canary.csv");
-		
 
 		return correlationResultModel;
     }
