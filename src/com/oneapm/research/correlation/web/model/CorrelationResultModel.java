@@ -15,6 +15,9 @@ import java.util.Comparator;
 
 
 public class CorrelationResultModel {
+	public int baseineId ;
+	public String baselineName ;
+	public ArrayList<ArrayList<Double>> baselineNum;
 	public ArrayList<CorrelationTuple> result;
 
 	public CorrelationResultModel(){
@@ -45,23 +48,29 @@ public class CorrelationResultModel {
         }
         TestCommon.writeToFile(outputFilename, output_list);
     }
-
+/*
 	public void sortList(){
 		System.setProperty("java.util.Arrays.useLegacyMergeSort", "false");
 		Collections.sort(result, new sortByCoefficient());
 	}
+*/
 }
-
+/*
 class sortByCoefficient implements Comparator{
+
+	private int dim;
+	sortByCoefficient(int dimen){
+		dim = dimen;
+	}
 	public int compare(Object o1,Object o2){
 		CorrelationTuple c1 = (CorrelationTuple) o1;
 		CorrelationTuple c2 = (CorrelationTuple) o2;
-		if(c2.coefficient>c1.coefficient)
+		if(c2.coefficient.get(dim)>c1.coefficient.get(dim))
 			return 1;
-		else if (c2.coefficient<c1.coefficient)
+		else if (c2.coefficient.get(dim)<c1.coefficient.get(dim))
 			return -1;
 		else
 			return 0;
 	}
 }
-
+*/

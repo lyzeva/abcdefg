@@ -6,7 +6,8 @@ Ext.application({
 			items : [{
 						xtype : "component",
 						region : "north"
-					}, {
+					},
+					{
 						region : "west",
 						width : "20%",
 						title : 'Configuration',
@@ -137,9 +138,9 @@ Ext.application({
 													},
 													async : true,
 													success : function(response, options) {
-														
+
 														var json = JSON.parse(response.responseText);
-														var correlationresult = Ext.getCmp('correlationresult');
+														var correlationresult = Ext.getCmp('correlationresult_chart');
 														correlationresult.rawData = json;
 														var data = [];
 														for(var i=0;i<json.length;i++)
@@ -161,7 +162,7 @@ Ext.application({
 						layout:"border",
 						xtype: "panel",
 						items:[{
-							xtype:'correlation_series',
+							xtype:'correlationresult_panel',
 							region:'north',
 							height:'55%'
 						}]

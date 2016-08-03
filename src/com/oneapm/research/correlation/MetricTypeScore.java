@@ -12,7 +12,7 @@ import java.util.*;
  * Created by ruan on 16-6-1.
  */
 public class MetricTypeScore {
-	private ArrayList<Double> perThroughputBaseline = null;
+	private ArrayList<ArrayList<Double>> perThroughputBaseline = null;
 	private ArrayList<ArrayList<Double>> perThroughputTimeseries = new ArrayList<>();
 	private String applicationId = "10";
 	private String metricName = "CPU/";
@@ -54,7 +54,7 @@ public class MetricTypeScore {
 		
 		if(resultMetricIdBaseline.next()){
 			metricId = resultMetricIdBaseline.getString(1);
-			perThroughputBaseline = getDataFromDruid(Integer.parseInt(metricId)).get(0);
+			perThroughputBaseline = getDataFromDruid(Integer.parseInt(metricId));
 			return true;
 		}
 		else{
@@ -82,11 +82,13 @@ public class MetricTypeScore {
 			int metricIdBaseline = entry.getKey();
 			String key = mapBaseline.get(metricIdBaseline);
 			if (metricIdBaseline != Integer.parseInt(metricId)){
-				ArrayList<Double> baselineValue = getDataFromDruid(metricIdBaseline).get(0);
 				CorrelationTuple tuple = new CorrelationTuple();
 				tuple.metric_id = metricIdBaseline;
 				tuple.metric_name = key;
-				tuple.coefficient = PearsonCoefficientCalculate.calculatePearson(perThroughputBaseline, baselineValue);
+				tuple.num = getDataFromDruid(metricIdBaseline);
+				for(int i=0; i<tuple.num.size(); i++) {
+					tuple.coefficient.add(PearsonCoefficientCalculate.calculatePearson(perThroughputBaseline.get(i), tuple.num.get(i)));
+				}
 				correlationResultModel.result.add(tuple);
 			}
 		}
@@ -113,7 +115,7 @@ public class MetricTypeScore {
 
             ArrayList<ResultSet> tmpBaseline = new ArrayList<>();
             for (int i = 0; i < tables.length; ++i) {
-                String selectResultBaseline = "SELECT num1, start_time_seconds FROM " + tables[(i + minIndex) % tables.length] + " WHERE start_time_seconds between " + startTime + " and " +
+                String selectResultBaseline = "SELECT num1,num2,num3,num4,num5,num6, start_time_seconds FROM " + tables[(i + minIndex) % tables.length] + " WHERE start_time_seconds between " + startTime + " and " +
                         endTime + " and application_id = " + applicationId + " and metric_id = " +  metricIdBaseline + " ORDER BY start_time_seconds";
                 ResultSet resultSetBaseline = metricdataConnection.getResultForSql(selectResultBaseline);
 
