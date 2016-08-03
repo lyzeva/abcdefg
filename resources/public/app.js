@@ -145,7 +145,7 @@ Ext.application({
 														var data = [];
 														for(var i=0;i<json.length;i++)
 														{
-															var record={index:json[i]['index'],okversion:json[i]['okversion']['canaryScore'],failversion:json[i]['failversion']['canaryScore']};
+															var record={baselineId:json[i]['baselineId'],baselineName:json[i]['baselineName']};
 															data.push(record);
 														}
 														correlationresult.getStore().loadData(data,false);

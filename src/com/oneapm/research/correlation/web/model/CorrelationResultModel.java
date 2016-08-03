@@ -43,7 +43,7 @@ public class CorrelationResultModel {
         	String[] b_line = new String[3];
             b_line[0] = Integer.toString(result.get(ii).metric_id);
             b_line[1] = result.get(ii).metric_name;
-            b_line[2] = Double.toString(result.get(ii).coefficient);
+            b_line[2] = Double.toString(result.get(ii).coefficient.get(0));
             output_list.add(b_line);
         }
         TestCommon.writeToFile(outputFilename, output_list);
