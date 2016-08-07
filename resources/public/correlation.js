@@ -8,8 +8,8 @@ Ext.define('Ext.correlationtest.Correlationresult', {
 			items : [{
 						xtype : 'panel',
 						layout : 'border',
-						region : 'west',
-						width : '35%',
+						region : 'north',
+						height : '35%',
 						items : [{
 									xtype : 'panel',
 									region : 'north',
@@ -35,14 +35,14 @@ Ext.define('Ext.correlationtest.Correlationresult', {
 									animate : true,
 									shadow : false,
 									store : Ext.create('Ext.data.JsonStore', {
-												fields : ['content', 'percent'],
+												fields : ['time', 'value'],
 												data : [],
 												autoLoad : true
 
 											}),
 									insetPadding : 40,
 									series : [{
-												type : 'pie',
+												type : 'line',
 
 												colorSet : ['green', 'red'],
 												donut : 40,
@@ -61,20 +61,19 @@ Ext.define('Ext.correlationtest.Correlationresult', {
 								}]
 					},
 					{
-						xtype : 'tabpanel',
+						xtype : 'panel',
 						region : 'center',
-						width : '65%',
+						height : '65%',
 						autoScroll : false,
 						layout : 'border',
-						items : [{
-							xtype : 'panel',
-							layout : 'border',
-							title : 'Overview',
-							autoScroll : false,
-							items : [{
-								xtype : 'grid',
-								region : 'north',
-								height : '50%',
+						items : [
+						{
+							xtype : 'grid',
+							region : 'west',
+							width : '50%',
+							height : '100%',
+							autoScroll : true,
+							title : 'Related Metrics',
 								id : 'canaryresult_grid',
 								store : Ext.create('Ext.data.JsonStore', {
 											fields : ['categoryName', 'score',
@@ -114,50 +113,24 @@ Ext.define('Ext.correlationtest.Correlationresult', {
 											flex : 23,
 											dataIndex : 'hotstates'
 										}]
-							},
-							{
-								xtype : 'grid',
-								region : 'center',
-								height : '50%',
-								id : 'canarycount_grid',
-								store : Ext.create('Ext.data.JsonStore', {
-											fields : ['bettermetrics',
-													'worsemetrics',
-													'unchangedmetrics'],
-											data : [],
-											autoLoad : false
-
-										}),
-								columns : [{
-											text : 'Better Metrics',
-											flex : 48,
-											dataIndex : 'bettermetrics'
-										}, {
-											text : 'Worse Metrics',
-											flex : 48,
-											dataIndex : 'worsemetrics'
-										}, {
-											text : 'Unchanged Metrics',
-											flex : 48,
-											dataIndex : 'unchangedmetrics'
-										}]
-							}]
 						},
 						{
-						    title:'HOT States',
+						    title:'All the Metrics',
 						    xtype : 'grid',
 						    id : 'hotstatescount_grid',
+						    region : 'east',
+							width : '50%',
+							height : '100%',
 						    autoScroll:true,
 						    store : Ext.create('Ext.data.JsonStore', {
-											fields : ['categoryname',
-													'dimenid','metricname',
-													'metrictypename','ratio'],
+											fields : ['dimenid','metricname',
+												    'score1','score2','score3','score4','score5','score6'],
 											data : [],
 											autoLoad : false
 
 										}),
 						    columns : [{
-											text : 'Dimension ID',
+											text : 'Metric ID',
 											flex : 48,
 											dataIndex : 'dimenid'
 										}, {
@@ -165,18 +138,36 @@ Ext.define('Ext.correlationtest.Correlationresult', {
 											flex : 48,
 											dataIndex : 'metricname'
 										}, {
-											text : 'Metric Type',
+											text : 'Correlation Score 1',
 											flex : 48,
-											dataIndex : 'metrictypename'
-										}, {
-											text : 'Category Name',
+											dataIndex : 'score1'
+										},
+                                        {
+											text : 'Correlation Score 2',
 											flex : 48,
-											dataIndex : 'categoryname'
-										}, {
-											text : 'Ratio',
+											dataIndex : 'score2'
+										},
+                                       {
+											text : 'Correlation Score 3',
 											flex : 48,
-											dataIndex : 'ratio'
-										}
+											dataIndex : 'score3'
+										},
+                                       {
+											text : 'Correlation Score 4',
+											flex : 48,
+											dataIndex : 'score4'
+										},
+                                       {
+											text : 'Correlation Score 5',
+											flex : 48,
+											dataIndex : 'score5'
+										},
+                                       {
+											text : 'Correlation Score 6',
+											flex : 48,
+											dataIndex : 'score6'
+										},
+										
 							]
 
 						}]

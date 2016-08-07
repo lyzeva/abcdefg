@@ -164,7 +164,7 @@ Ext.application({
 						items:[{
 							xtype:'correlationresult_panel',
 							region:'north',
-							height:'55%'
+							height: '100%'
 						}]
 					}]
 		});
