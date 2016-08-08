@@ -140,14 +140,11 @@ Ext.application({
 													success : function(response, options) {
 
 														var json = JSON.parse(response.responseText);
-														var correlationresult = Ext.getCmp('correlationresult_chart');
+														var correlationresult = Ext.getCmp('correlationresult_panel');
 														correlationresult.rawData = json;
 														var data = [];
-														for(var i=0;i<json.length;i++)
-														{
-															var record={baselineId:json[i]['baselineId'],baselineName:json[i]['baselineName']};
-															data.push(record);
-														}
+    													var record={baselineId:json[1]['baselineId'],baselineName:json[i]['baselineName']};
+														data.push(record);
 														correlationresult.getStore().loadData(data,false);
 													}
 												});

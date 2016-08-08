@@ -46,7 +46,7 @@ public class MetricTypeScore {
 
 	
 	
-	public boolean preparedPerThroughput() throws SQLException {
+	public boolean preparedPerThroughput(CorrelationResultModel resultModel) throws SQLException {
 		// WebTransaction
 		String selectMetricIdBaseline = "SELECT metric_id, metric_name from metric_name_entity_new where metric_name =\"" + metricName + "\" and application_id = " + applicationId;
 
@@ -54,7 +54,9 @@ public class MetricTypeScore {
 		
 		if(resultMetricIdBaseline.next()){
 			metricId = resultMetricIdBaseline.getString(1);
-			perThroughputBaseline = getDataFromDruid(Integer.parseInt(metricId));
+			resultModel.baselineId = Integer.parseInt(metricId);
+			perThroughputBaseline = getDataFromDruid(resultModel.baselineId);
+			resultModel.baselineNum = perThroughputBaseline;
 			return true;
 		}
 		else{
@@ -68,14 +70,12 @@ public class MetricTypeScore {
 	
 	
 
-	public CorrelationResultModel processing() throws SQLException,IOException {
+	public void processing(CorrelationResultModel resultModel) throws SQLException,IOException {
 		String selectMetricIdBaseline = "SELECT metric_id, metric_name from metric_name_entity_new where application_id = " + applicationId + " and metric_id != " + metricId;
 
 		ResultSet resultMetricIdBaseline = metricnameConnection.getResultForSql(selectMetricIdBaseline);
 
 		HashMap<Integer, String> mapBaseline = CanaryUtils.getMetricIdFromResultSet(resultMetricIdBaseline);
-		
-		CorrelationResultModel correlationResultModel = new CorrelationResultModel();
 
 
 		for (Map.Entry<Integer, String> entry : mapBaseline.entrySet()){
@@ -89,11 +89,10 @@ public class MetricTypeScore {
 				for(int i=0; i<tuple.num.size(); i++) {
 					tuple.coefficient.add(PearsonCoefficientCalculate.calculatePearson(perThroughputBaseline.get(i), tuple.num.get(i)));
 				}
-				correlationResultModel.result.add(tuple);
+				resultModel.result.add(tuple);
 			}
 		}
 
-		return correlationResultModel;
     }
 
 

@@ -1,6 +1,7 @@
 package com.oneapm.research.correlation.web.model;
 
 import com.oneapm.research.correlation.TestCommon;
+import com.oneapm.research.correlation.web.Config;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,12 +16,13 @@ import java.util.Comparator;
 
 
 public class CorrelationResultModel {
-	public int baseineId ;
+	public int baselineId ;
 	public String baselineName ;
-	public ArrayList<ArrayList<Double>> baselineNum;
+	public ArrayList<ArrayList<Double>> baselineNum = null;
 	public ArrayList<CorrelationTuple> result;
 
 	public CorrelationResultModel(){
+		baselineName = Config.chooseMetricName;
 		result = new ArrayList<>();
 	}
 
