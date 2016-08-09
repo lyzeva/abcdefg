@@ -98,44 +98,24 @@ Ext.define('Ext.correlationtest.Correlationresult', {
 							height : '100%',
 							autoScroll : true,
 							title : 'Related Metrics',
-								id : 'canaryresult_grid',
+								id : 'relatedmetrics_grid',
 								store : Ext.create('Ext.data.JsonStore', {
-											fields : ['categoryName', 'score',
-													'weight', 'okstates',
-													'coldstates',
-													'nodatastates', 'hotstates'],
+											model : 'TestMetric',
 											data : [],
 											autoLoad : false
-
 										}),
 								columns : [{
-											text : 'Category',
+											text : 'Metric ID',
 											flex : 48,
-											dataIndex : 'categoryName'
+											dataIndex : 'metricid'
 										}, {
-											text : 'Score',
+											text : 'Metric Name',
 											flex : 18,
-											dataIndex : 'score'
+											dataIndex : 'metricname'
 										}, {
-											text : 'Weight',
+											text : 'Correlation Score',
 											flex : 18,
-											dataIndex : 'weight'
-										}, {
-											text : 'OK States',
-											flex : 23,
-											dataIndex : 'okstates'
-										}, {
-											text : 'COLD States',
-											flex : 23,
-											dataIndex : 'coldstates'
-										}, {
-											text : 'NODATA States',
-											flex : 35,
-											dataIndex : 'nodatastates'
-										}, {
-											text : 'HOT States',
-											flex : 23,
-											dataIndex : 'hotstates'
+											dataIndex : 'correlationscore'
 										}]
 						},
 						{

@@ -141,11 +141,22 @@ Ext.application({
 
 														var json = JSON.parse(response.responseText);
 														var correlationresult = Ext.getCmp('correlationresult_panel');
-														correlationresult.rawData = json;
-														var data = [];
-    													var record={baselineId:json[1]['baselineId'],baselineName:json[i]['baselineName']};
+														for(var i=0;i<6;i++){
+   													        var baseline = json[0]['baselineNum'][i];
+    														var data = [];
+    													    for(var j=0;j<baseline.length;j++){
+    													        var record = { time: j, num: baseline[j]};
+    													        data.push(record);
+    													    }
+    													    var baselineChart = Ext.getCmp('cchart'+j);
+    													    baselineChart.getStore().loadData(data,false);
+    													}
 														data.push(record);
 														correlationresult.getStore().loadData(data,false);
+														var jsonresult = json[0]['result'];
+														for(var i=0;i<jsonresult.length;i++){
+
+														}
 													}
 												});
 						    			   }
