@@ -6,83 +6,21 @@ Ext.define('Ext.correlationtest.Correlationresult', {
 			autoScroll : true,
 			id : 'correlationresult_panel',
 			title : 'Correlation Result',
-			rawData : [];
 			layout : 'border',
-			items : [{
-						xtype : 'tabpanel',
-						layout : 'border',
-						region : 'north',
- 						title : 'Chosen Metric Plot',
+			items : [
+			        {
+   						xtype : 'timeseriestabpanel',
+    					id : 'baselinetabpanel',
+    					region : 'north',
 						height : '35%',
-						items : [{
-						    xtype : 'timeserieschart',
-						    id : 'cchart1',
-						    title : 'Num1'
-						}
-						,{
-						    xtype : 'timeserieschart',
-						    id : 'cchart2',
-						    title : 'Num2'
-						}
-						,{
-						    xtype : 'timeserieschart',
-						    id : 'cchart3',
-						    title : 'Num3'
-						}
-						,{
-						    xtype : 'timeserieschart',
-						    id : 'cchart4',
-						    title : 'Num4'
-						}
-						,{
-						    xtype : 'timeserieschart',
-						    id : 'cchart5',
-						    title : 'Num5'
-						}
-						,{
-						    xtype : 'timeserieschart',
-						    id : 'cchart6',
-						    title : 'Num6'
-						}
-								]
+ 						title : 'Chosen Metric Plot',
 					},
                     {
-						xtype : 'tabpanel',
-						layout : 'border',
+						xtype : 'timeseriestabpanel',
+						id : 'othermetrictabpanel',
 						region : 'center',
  						title : 'Other Metric Plot',
 						height : '35%',
-						items : [{
-						    xtype : 'timeserieschart',
-						    id : 'tchart1',
-						    title : 'Num1'
-						}
-						,{
-						    xtype : 'timeserieschart',
-						    id : 'tchart2',
-						    title : 'Num2'
-						}
-						,{
-						    xtype : 'timeserieschart',
-						    id : 'tchart3',
-						    title : 'Num3'
-						}
-						,{
-						    xtype : 'timeserieschart',
-						    id : 'tchart4',
-						    title : 'Num4'
-						}
-						,{
-						    xtype : 'timeserieschart',
-						    id : 'tchart5',
-						    title : 'Num5'
-						}
-						,{
-						    xtype : 'timeserieschart',
-						    id : 'tchart6',
-						    title : 'Num6'
-						}
-						]
 					},
 					{
 						xtype : 'panel',
@@ -91,90 +29,70 @@ Ext.define('Ext.correlationtest.Correlationresult', {
 						autoScroll : false,
 						layout : 'border',
 						items : [
-						{
-							xtype : 'grid',
-							region : 'west',
-							width : '50%',
-							height : '100%',
-							autoScroll : true,
-							title : 'Related Metrics',
-								id : 'relatedmetrics_grid',
-								store : Ext.create('Ext.data.JsonStore', {
-											model : 'TestMetric',
-											data : [],
-											autoLoad : false
-										}),
-								columns : [{
-											text : 'Metric ID',
-											flex : 48,
-											dataIndex : 'metricid'
-										}, {
-											text : 'Metric Name',
-											flex : 18,
-											dataIndex : 'metricname'
-										}, {
-											text : 'Correlation Score',
-											flex : 18,
-											dataIndex : 'correlationscore'
-										}]
-						},
-						{
-						    title:'All the Metrics',
-						    xtype : 'grid',
-						    id : 'hotstatescount_grid',
-						    region : 'east',
-							width : '50%',
-							height : '100%',
-						    autoScroll:true,
-						    store : Ext.create('Ext.data.JsonStore', {
-											fields : ['dimenid','metricname',
-												    'score1','score2','score3','score4','score5','score6'],
-											data : [],
-											autoLoad : false
 
-										}),
-						    columns : [{
-											text : 'Metric ID',
-											flex : 48,
-											dataIndex : 'dimenid'
-										}, {
-											text : 'Metric Name',
-											flex : 48,
-											dataIndex : 'metricname'
-										}, {
-											text : 'Correlation Score 1',
-											flex : 48,
-											dataIndex : 'score1'
-										},
-                                        {
-											text : 'Correlation Score 2',
-											flex : 48,
-											dataIndex : 'score2'
-										},
-                                       {
-											text : 'Correlation Score 3',
-											flex : 48,
-											dataIndex : 'score3'
-										},
-                                       {
-											text : 'Correlation Score 4',
-											flex : 48,
-											dataIndex : 'score4'
-										},
-                                       {
-											text : 'Correlation Score 5',
-											flex : 48,
-											dataIndex : 'score5'
-										},
-                                       {
-											text : 'Correlation Score 6',
-											flex : 48,
-											dataIndex : 'score6'
-										},
-										
-							]
+        						{
+        						    title:'All the Metrics',
+        						    xtype : 'grid',
+        						    id : 'metrics_grid',
+        						    region : 'east',
+        							width : '50%',
+        							height : '100%',
+        						    autoScroll:true,
+        						    store : Ext.create('Ext.data.JsonStore', {
+        											model : 'TestMetric',
+        											data : [],
+        											autoLoad : true
+        										}),
+        						    columns : [{
+        											text : 'Metric ID',
+        											flex : 48,
+        											dataIndex : 'metricid'
+        										}, {
+        											text : 'Metric Name',
+        											flex : 48,
+        											dataIndex : 'metricname'
+        										}, {
+        											text : 'Correlation Score 1',
+        											flex : 48,
+        											dataIndex : 'independentnum.correlationscore'
+        										},
+                                                {
+        											text : 'Correlation Score 2',
+        											flex : 48,
+        											dataIndex : 'independentnum.correlationscore'
+        										},
+                                               {
+        											text : 'Correlation Score 3',
+        											flex : 48,
+        											dataIndex : 'independentnum.correlationscore'
+        										},
+                                               {
+        											text : 'Correlation Score 4',
+        											flex : 48,
+        											dataIndex : 'independentnum.correlationscore'
+        										},
+                                               {
+        											text : 'Correlation Score 5',
+        											flex : 48,
+        											dataIndex : 'independentnum.correlationscore'
+        										},
+                                               {
+        											text : 'Correlation Score 6',
+        											flex : 48,
+        											dataIndex : 'independentnum.correlationscore'
+        										},
 
-						}]
+        							]
+ /*       							listeners : {
+        							    select :    function(this, record, index, eOpts){
+        							                    alert('a record selected');
+        							                    var c = this.getStore().independentnum;
+
+
+        							                }
+        							}
+*/
+        						}]
 
 					}]
 		});

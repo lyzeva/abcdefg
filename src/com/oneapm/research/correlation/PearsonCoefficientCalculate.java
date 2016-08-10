@@ -1,5 +1,6 @@
 package com.oneapm.research.correlation;
 
+import com.oneapm.research.correlation.web.model.IndependentNum;
 import java.util.ArrayList;
 import java.lang.Math;
 
@@ -11,8 +12,16 @@ import java.lang.Math;
  */  
 public class PearsonCoefficientCalculate {  
       
-	public static double calculatePearson(ArrayList<Double> xList, ArrayList<Double> yList){
-		return calculateNumerator(xList, yList)/calculateDenominator(xList, yList);
+	public static IndependentNum calculatePearson(ArrayList<Double> xList, ArrayList<Double> yList){
+	    IndependentNum timeserieResult = new IndependentNum();
+        double denominator = calculateDenominator(xList, yList);
+        if(denominator < 1e-4) {
+            timeserieResult.coefficient = Double.NaN;
+        }
+        else
+		    timeserieResult.coefficient = calculateNumerator(xList, yList)/denominator;
+        timeserieResult.timeserie = yList;
+        return timeserieResult;
 	}
 	
     public static double calculateDenominator(ArrayList<Double> xList, ArrayList<Double> yList){  
@@ -38,8 +47,9 @@ public class PearsonCoefficientCalculate {
             yException += Math.pow(yList.get(i)-yAverage, 2);  
         }  
         //calculate denominator of   
-        return standardDifference = Math.sqrt(xException*yException);  
-    }  
+        System.out.println(Math.sqrt(xException*yException));
+        return standardDifference = Math.sqrt(xException*yException);
+    }
     
     public static double calculateNumerator(ArrayList<Double> xList, ArrayList<Double> yList){  
         double result =0.0;  

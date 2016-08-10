@@ -111,7 +111,7 @@ Ext.application({
                                     width:300,
                                     value:"10"
                                },
-						       {
+						        {
 						    	   xtype:"button",
 						    	   id:"apply",
 						    	   text:'Apply',
@@ -140,32 +140,54 @@ Ext.application({
 													success : function(response, options) {
 
 														var json = JSON.parse(response.responseText);
-														var correlationresult = Ext.getCmp('correlationresult_panel');
 														for(var i=0;i<6;i++){
-   													        var baseline = json[0]['baselineNum'][i];
+   													        var baseline = json['baselineNum'][i];
     														var data = [];
     													    for(var j=0;j<baseline.length;j++){
     													        var record = { time: j, num: baseline[j]};
     													        data.push(record);
     													    }
-    													    var baselineChart = Ext.getCmp('cchart'+j);
-    													    baselineChart.getStore().loadData(data,false);
+    													    console.log(data);
+    													    console.log(Ext.getCmp('baselinetabpanel').getComponent(i).title);
+    													    var store =  Ext.create('Ext.data.JsonStore', {
+                                                                                        model : 'TimeSeriesValue',
+                                                                                        data : [],
+                                                                                        autoLoad : true
+                                                                                   });
+                                                            store.loadData(data,false);
+    													    Ext.getCmp('baselinetabpanel').getComponent(i).reconfigure(store);
     													}
-														data.push(record);
-														correlationresult.getStore().loadData(data,false);
-														var jsonresult = json[0]['result'];
+														var jsonresult = json.result;
 														for(var i=0;i<jsonresult.length;i++){
+														    Ext.getCmp('metrics_grid').getStore().loadRawData(jsonresult,false);
 
 														}
+													},
+													failure : function(response, options){
+													    alert('failure');
 													}
+
 												});
 						    			   }
 						    		   }
 						    	   }
-						       }]
+						        }
+						        ,{
+                                    xtype : 'button',
+                                    text : 'test',
+                                    listeners :{
+                                            click:{
+                                                fn:function(){
+                                                    alert();
+
+                                                }
+                                            }
+                                    }
+						        }
+						       ]
 					},
 					{
-						region : "center",
+/*						region : "center",
 						width : "80%",
 						layout:"border",
 						xtype: "panel",
@@ -173,7 +195,11 @@ Ext.application({
 							xtype:'correlationresult_panel',
 							region:'north',
 							height: '100%'
-						}]
+						}]*/
+						region : "center",
+//						width : "60%",
+//						height: '100%',
+						xtype:'correlationresult_panel',
 					}]
 		});
 	}

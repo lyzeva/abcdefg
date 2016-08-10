@@ -16,15 +16,11 @@ import static spark.SparkBase.staticFileLocation;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("1");
         staticFileLocation("/public");
-        System.out.println("2");
         port(9090);
-        System.out.println("3");
         get("/", index());
-        System.out.println("4");
+        System.out.println(Double.toString(Double.MIN_VALUE));
         get("/correlationresult", getCorrelationResult());
-        System.out.println("5");
     }
 
     private static Route getCorrelationResult() {

@@ -13,7 +13,6 @@ import java.util.*;
  */
 public class MetricTypeScore {
 	private ArrayList<ArrayList<Double>> perThroughputBaseline = null;
-	private ArrayList<ArrayList<Double>> perThroughputTimeseries = new ArrayList<>();
 	private String applicationId = "10";
 	private String metricName = "CPU/";
 	private String metricId;
@@ -55,7 +54,7 @@ public class MetricTypeScore {
 		if(resultMetricIdBaseline.next()){
 			metricId = resultMetricIdBaseline.getString(1);
 			resultModel.baselineId = Integer.parseInt(metricId);
-			perThroughputBaseline = getDataFromDruid(resultModel.baselineId);
+			perThroughputBaseline = getTimeserieById(resultModel.baselineId);
 			resultModel.baselineNum = perThroughputBaseline;
 			return true;
 		}
@@ -81,14 +80,16 @@ public class MetricTypeScore {
 		for (Map.Entry<Integer, String> entry : mapBaseline.entrySet()){
 			int metricIdBaseline = entry.getKey();
 			String key = mapBaseline.get(metricIdBaseline);
-			if (metricIdBaseline != Integer.parseInt(metricId)){
+			if (metricIdBaseline != resultModel.baselineId){
 				CorrelationTuple tuple = new CorrelationTuple();
 				tuple.metric_id = metricIdBaseline;
 				tuple.metric_name = key;
-				tuple.num = getDataFromDruid(metricIdBaseline);
-				for(int i=0; i<tuple.num.size(); i++) {
-					tuple.coefficient.add(PearsonCoefficientCalculate.calculatePearson(perThroughputBaseline.get(i), tuple.num.get(i)));
+				ArrayList<ArrayList<Double>> num = getTimeserieById(metricIdBaseline);
+				ArrayList<IndependentNum> timeserieResults = new ArrayList<>();
+				for(int i=0; i<num.size(); i++) {
+					timeserieResults.add(PearsonCoefficientCalculate.calculatePearson(perThroughputBaseline.get(i), num.get(i)));
 				}
+				tuple.num_result = timeserieResults;
 				resultModel.result.add(tuple);
 			}
 		}
@@ -96,7 +97,7 @@ public class MetricTypeScore {
     }
 
 
-    public ArrayList<ArrayList<Double> > getDataFromDruid(int metricIdBaseline) throws SQLException {
+    public ArrayList<ArrayList<Double> > getTimeserieById(int metricIdBaseline) throws SQLException {
         ArrayList<ArrayList<Double>> result = new ArrayList<>();
         String[] tables = {"metric_data_entity_pt1m_0", "metric_data_entity_pt1m_1", "metric_data_entity_pt1m_2", "metric_data_entity_pt1m_3", "metric_data_entity_pt1m_4"};
 

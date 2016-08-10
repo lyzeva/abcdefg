@@ -14,7 +14,7 @@ public class CorrelationTest {
 
 	public static CorrelationResultModel correlationTest(String startTime,String endTime) {
 		boolean hasMetricName=false;
-		public CorrelationResultModel currentResult = new CorrelationResultModel();
+		CorrelationResultModel currentResult = new CorrelationResultModel();
 		try {
 			metricTypeScore = new MetricTypeScore();
 			metricTypeScore.setStartTime(startTime);
@@ -27,7 +27,6 @@ public class CorrelationTest {
 		if(hasMetricName) try{
 			metricTypeScore.processing(currentResult);
 			currentResult.outputToCsv("coefficient1.csv");
-			currentResult.outputToCsv("coefficient2.csv");
 		} catch(Exception e){
 			e.printStackTrace();
 		}

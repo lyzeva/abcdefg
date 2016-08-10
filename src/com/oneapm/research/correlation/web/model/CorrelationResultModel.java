@@ -19,7 +19,7 @@ public class CorrelationResultModel {
 	public int baselineId ;
 	public String baselineName ;
 	public ArrayList<ArrayList<Double>> baselineNum = null;
-	public ArrayList<CorrelationTuple> result;
+	public ArrayList<CorrelationTuple> result = null;
 
 	public CorrelationResultModel(){
 		baselineName = Config.chooseMetricName;
@@ -27,6 +27,7 @@ public class CorrelationResultModel {
 	}
 
 	public CorrelationResultModel(ArrayList<CorrelationTuple> tupleList){
+		baselineName = Config.chooseMetricName;
 		result = tupleList;
 	}
 	
@@ -36,16 +37,26 @@ public class CorrelationResultModel {
         if (numData < 1) return;
         List<String[]> output_list = new ArrayList<>();
 
-		String[] a_line = new String[3];
+		String[] a_line = new String[8];
 		a_line[0] = "metricId";
 		a_line[1] = "metricName";
-		a_line[2] = "coefficient";
+		a_line[2] = "coefficient1";
+		a_line[3] = "coefficient2";
+		a_line[4] = "coefficient3";
+		a_line[5] = "coefficient4";
+		a_line[6] = "coefficient5";
+		a_line[7] = "coefficient6";
 		output_list.add(a_line);
         for (int ii = 0; ii < numData; ++ii) {
-        	String[] b_line = new String[3];
+        	String[] b_line = new String[8];
             b_line[0] = Integer.toString(result.get(ii).metric_id);
             b_line[1] = result.get(ii).metric_name;
-            b_line[2] = Double.toString(result.get(ii).coefficient.get(0));
+            b_line[2] = Double.toString(result.get(ii).num_result.get(0).coefficient);
+			b_line[3] = Double.toString(result.get(ii).num_result.get(1).coefficient);
+			b_line[4] = Double.toString(result.get(ii).num_result.get(2).coefficient);
+			b_line[5] = Double.toString(result.get(ii).num_result.get(3).coefficient);
+			b_line[6] = Double.toString(result.get(ii).num_result.get(4).coefficient);
+			b_line[7] = Double.toString(result.get(ii).num_result.get(5).coefficient);
             output_list.add(b_line);
         }
         TestCommon.writeToFile(outputFilename, output_list);

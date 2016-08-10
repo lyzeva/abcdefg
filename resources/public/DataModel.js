@@ -6,7 +6,7 @@ Ext.define('TimeSeriesValue', {
     ]
 });
 
-Ext.define('IndependentNum'{
+Ext.define('IndependentNum',{
     extend : 'Ext.data.Model',
     fields: [
         {name: 'correlationscore', type:'number', defaultValue: Number.NaN}

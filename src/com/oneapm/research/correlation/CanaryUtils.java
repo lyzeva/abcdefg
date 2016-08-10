@@ -49,7 +49,7 @@ public class CanaryUtils {
             ArrayList<String> timestampB = new ArrayList<>();
             int count = 0;
             while (rb.next()) {
-                ArrayList<Double> temp = new ArrayList<Double>();
+                ArrayList<Double> temp = new ArrayList<>();
                 for (int j = 1; j <= dimen; ++j) {
                     temp.add(j - 1, rb.getDouble(("num" + j)));
                 }
