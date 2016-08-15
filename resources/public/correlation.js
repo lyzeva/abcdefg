@@ -23,27 +23,21 @@ Ext.define('Ext.correlationtest.Correlationresult', {
 						height : '35%',
 					},
 					{
-						xtype : 'panel',
 						region : 'south',
 						height : '30%',
 						autoScroll : false,
-						layout : 'border',
-						items : [
 
-        						{
-        						    title:'All the Metrics',
-        						    xtype : 'grid',
-        						    id : 'metrics_grid',
-        						    region : 'east',
-        							width : '50%',
-        							height : '100%',
-        						    autoScroll:true,
+						xtype : 'grid',
+						title:'All the Metrics',
+						id : 'metrics_grid',
+						layout : 'border',
+
         						    store : Ext.create('Ext.data.JsonStore', {
-        											model : 'TestMetric',
+        											fields : ['metricid','metricname','cscore1','cscore2','cscore3','cscore4','cscore5','cscore6','nums'],
         											data : [],
         											autoLoad : true
         										}),
-        						    columns : [{
+        						    columns : [ {
         											text : 'Metric ID',
         											flex : 48,
         											dataIndex : 'metricid'
@@ -51,48 +45,69 @@ Ext.define('Ext.correlationtest.Correlationresult', {
         											text : 'Metric Name',
         											flex : 48,
         											dataIndex : 'metricname'
-        										}, {
+        										}
+        										,{
         											text : 'Correlation Score 1',
         											flex : 48,
-        											dataIndex : 'independentnum.correlationscore'
+        											dataIndex : 'cscore1'
         										},
                                                 {
         											text : 'Correlation Score 2',
         											flex : 48,
-        											dataIndex : 'independentnum.correlationscore'
+        											dataIndex : 'cscore2'
         										},
                                                {
         											text : 'Correlation Score 3',
         											flex : 48,
-        											dataIndex : 'independentnum.correlationscore'
+        											dataIndex : 'cscore3'
         										},
                                                {
         											text : 'Correlation Score 4',
         											flex : 48,
-        											dataIndex : 'independentnum.correlationscore'
+        											dataIndex : 'cscore4'
         										},
                                                {
         											text : 'Correlation Score 5',
         											flex : 48,
-        											dataIndex : 'independentnum.correlationscore'
+        											dataIndex : 'cscore5'
         										},
                                                {
         											text : 'Correlation Score 6',
         											flex : 48,
-        											dataIndex : 'independentnum.correlationscore'
-        										},
+        											dataIndex : 'cscore6'
+        										}
 
         							]
- /*       							listeners : {
-        							    select :    function(this, record, index, eOpts){
-        							                    alert('a record selected');
-        							                    var c = this.getStore().independentnum;
+                                        ,listeners : {
+                                            select :    function(row, record, index, eOpts){
+       													    var panel = Ext.getCmp('othermetrictabpanel');
+       													    panel.removeAll();
+       														var nums = record.raw.nums;
 
+                                                            for(var i=0;i<6;i++){
+        														var data = [];
+        														var baseline = nums[i]['timeserie'];
+        														console.log(baseline);
+        													    for(var j=0;j<baseline.length;j++){
+        													        var record = { time: j, num: baseline[j]};
+        													        data.push(record);
+        													    }
+        													    var store =  Ext.create('Ext.data.JsonStore', {
+                                                                                            model : 'TimeSeriesValue',
+                                                                                            data : [],
+                                                                                            autoLoad : true
+                                                                                       });
+                                                                store.loadData(data,false);
+                                                                var chart = Ext.create('Ext.correlationtest.TimeseriesChart',{
+                                                                    title: 'Num'+(i+1),
+                                                                    store: store
+                                                                });
+                                                                panel.add(chart);
 
-        							                }
-        							}
-*/
-        						}]
+                                                            }
+                                                        }
+                                        }
+
 
 					}]
 		});

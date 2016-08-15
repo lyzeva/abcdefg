@@ -138,8 +138,10 @@ Ext.application({
 													},
 													async : true,
 													success : function(response, options) {
+														var json = eval('('+response.responseText+')');
 
-														var json = JSON.parse(response.responseText);
+   													    var panel = Ext.getCmp('baselinetabpanel');
+   													    panel.removeAll();
 														for(var i=0;i<6;i++){
    													        var baseline = json['baselineNum'][i];
     														var data = [];
@@ -148,20 +150,37 @@ Ext.application({
     													        data.push(record);
     													    }
     													    console.log(data);
-    													    console.log(Ext.getCmp('baselinetabpanel').getComponent(i).title);
+    													    console.log(Ext.getCmp('baselinetabpanel').getComponent(i));
     													    var store =  Ext.create('Ext.data.JsonStore', {
                                                                                         model : 'TimeSeriesValue',
                                                                                         data : [],
                                                                                         autoLoad : true
                                                                                    });
                                                             store.loadData(data,false);
-    													    Ext.getCmp('baselinetabpanel').getComponent(i).reconfigure(store);
+                                                            var chart = Ext.create('Ext.correlationtest.TimeseriesChart',{
+                                                                title: 'Num'+(i+1),
+                                                                store: store
+                                                            });
+                                                            panel.add(chart);
+                                                            console.log(i);
     													}
-														var jsonresult = json.result;
-														for(var i=0;i<jsonresult.length;i++){
-														    Ext.getCmp('metrics_grid').getStore().loadRawData(jsonresult,false);
+														var jsonresult = json['result'];
+                                                        console.log(jsonresult);
 
+                                                        var data = [];
+														for(var i=0;i<jsonresult.length;i++){
+														    var record = { metricid: jsonresult[i]['metric_id'], metricname: jsonresult[i]['metric_name'],
+														                   cscore1: jsonresult[i]['num_result'][0]['coefficient'],
+														                   cscore2: jsonresult[i]['num_result'][1]['coefficient'],
+														                   cscore3: jsonresult[i]['num_result'][2]['coefficient'],
+														                   cscore4: jsonresult[i]['num_result'][3]['coefficient'],
+														                   cscore5: jsonresult[i]['num_result'][4]['coefficient'],
+														                   cscore6: jsonresult[i]['num_result'][5]['coefficient'],
+														                   nums: jsonresult[i]['num_result']};
+														    data.push(record);
 														}
+    												    Ext.getCmp('metrics_grid').getStore().loadData(data,false);
+
 													},
 													failure : function(response, options){
 													    alert('failure');

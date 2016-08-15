@@ -25,8 +25,7 @@ public class PearsonCoefficientCalculate {
 	}
 	
     public static double calculateDenominator(ArrayList<Double> xList, ArrayList<Double> yList){  
-        double standardDifference = 0.0;  
-        int size = xList.size();  
+        int size = xList.size();
         double xAverage = 0.0;  
         double yAverage = 0.0;  
         double xException = 0.0;  
@@ -47,8 +46,7 @@ public class PearsonCoefficientCalculate {
             yException += Math.pow(yList.get(i)-yAverage, 2);  
         }  
         //calculate denominator of   
-        System.out.println(Math.sqrt(xException*yException));
-        return standardDifference = Math.sqrt(xException*yException);
+        return Math.sqrt(xException*yException);
     }
     
     public static double calculateNumerator(ArrayList<Double> xList, ArrayList<Double> yList){  

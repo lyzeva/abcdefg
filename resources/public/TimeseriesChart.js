@@ -4,11 +4,10 @@ Ext.define('Ext.correlationtest.TimeseriesChart',{
     xtype : 'timeserieschart',
     width : 300,
     height : 300,
-    store : Ext.create('Ext.data.JsonStore', {
-                                                                                        model : 'TimeSeriesValue',
-                                                                                        data : [],
-                                                                                        autoLoad : true
-                                                                                   }),
+    store :  {
+            model : 'TimeSeriesValue',
+            data :  []
+    },
     axes: [
                                         {
                                             title: 'Time',

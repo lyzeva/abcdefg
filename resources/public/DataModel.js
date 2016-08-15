@@ -21,7 +21,7 @@ Ext.define('TestMetric',{
     extend : 'Ext.data.Model',
     fields: [
         {name: 'metricid', type:'int'},
-        {name: 'metricname', type:'string'},
+        {name: 'metricname', type:'string'}
     ],
     hasMany : {
         model : 'IndependentNum',
