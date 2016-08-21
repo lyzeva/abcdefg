@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class IndependentNum {
     public double coefficient = Double.NaN;
+    public double granger = Double.NaN;
 //    public ArrayList<Integer> timepos = null;
     public ArrayList<Double> timeserie = null;
 }

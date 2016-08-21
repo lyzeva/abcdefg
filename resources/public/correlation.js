@@ -33,10 +33,18 @@ Ext.define('Ext.correlationtest.Correlationresult', {
 						layout : 'border',
 
         						    store : Ext.create('Ext.data.JsonStore', {
-        											fields : ['metricid','metricname','cscore1','cscore2','cscore3','cscore4','cscore5','cscore6','nums'],
+        											fields : ['metricid','metricname',
+        											        'cscore1','granger1',
+        											        'cscore2','granger2',
+        											        'cscore3','granger3',
+        											        'cscore4','granger4',
+        											        'cscore5','granger5',
+        											        'cscore6','granger6',
+        											        'nums'],
         											data : [],
         											autoLoad : true
         										}),
+        							activeItem: 2,
         						    columns : [ {
         											text : 'Metric ID',
         											flex : 48,
@@ -50,31 +58,61 @@ Ext.define('Ext.correlationtest.Correlationresult', {
         											text : 'Correlation Score 1',
         											flex : 48,
         											dataIndex : 'cscore1'
-        										},
-                                                {
+        										}
+        										,{
+        											text : 'Granger Score 1',
+        											flex : 48,
+        											dataIndex : 'granger1'
+        										}
+                                                ,{
         											text : 'Correlation Score 2',
         											flex : 48,
         											dataIndex : 'cscore2'
+        										},
+        										{
+        											text : 'Granger Score 2',
+        											flex : 48,
+        											dataIndex : 'granger2'
         										},
                                                {
         											text : 'Correlation Score 3',
         											flex : 48,
         											dataIndex : 'cscore3'
         										},
+        										{
+        											text : 'Granger Score 3',
+        											flex : 48,
+        											dataIndex : 'granger3'
+        										},
                                                {
         											text : 'Correlation Score 4',
         											flex : 48,
         											dataIndex : 'cscore4'
+        										},
+        										{
+        											text : 'Granger Score 4',
+        											flex : 48,
+        											dataIndex : 'granger4'
         										},
                                                {
         											text : 'Correlation Score 5',
         											flex : 48,
         											dataIndex : 'cscore5'
         										},
+        										{
+        											text : 'Granger Score 5',
+        											flex : 48,
+        											dataIndex : 'granger5'
+        										},
                                                {
         											text : 'Correlation Score 6',
         											flex : 48,
         											dataIndex : 'cscore6'
+        										},
+        										{
+        											text : 'Granger Score 6',
+        											flex : 48,
+        											dataIndex : 'granger6'
         										}
 
         							]

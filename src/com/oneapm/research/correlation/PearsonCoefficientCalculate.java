@@ -12,16 +12,13 @@ import java.lang.Math;
  */  
 public class PearsonCoefficientCalculate {  
       
-	public static IndependentNum calculatePearson(ArrayList<Double> xList, ArrayList<Double> yList){
-	    IndependentNum timeserieResult = new IndependentNum();
+	public static double calculatePearson(ArrayList<Double> xList, ArrayList<Double> yList){
         double denominator = calculateDenominator(xList, yList);
         if(denominator < 1e-4) {
-            timeserieResult.coefficient = Double.NaN;
+            return Double.NaN;
         }
         else
-		    timeserieResult.coefficient = calculateNumerator(xList, yList)/denominator;
-        timeserieResult.timeserie = yList;
-        return timeserieResult;
+		    return  calculateNumerator(xList, yList)/denominator;
 	}
 	
     public static double calculateDenominator(ArrayList<Double> xList, ArrayList<Double> yList){  

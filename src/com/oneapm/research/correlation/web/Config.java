@@ -25,11 +25,15 @@ public class Config {
 
     public static String withPastTimeData = "10800";
 
-    public static String applicationId = "10";
+    public static String applicationId = "11";
 
 	public static String starttime="1464620400";
 
 	public static String endtime="1464638400";
+
+    public static String CRITICAL_VALUE = "0.85";
+
+    public static String aLagSize = "2";
 
 	private static SimpleDateFormat format = new SimpleDateFormat( "yyyy/MM/dd HH:mm" );
 
@@ -43,6 +47,8 @@ public class Config {
         metricdataPath = request.queryParams("metricdataPath");
         withPastTimeData = Integer.parseInt(request.queryParams("withpasttimedata")) * 60 + "";
         applicationId = request.queryParams("applicationid");
+        CRITICAL_VALUE = request.queryParams("grangerCRITICALVALUE");
+        aLagSize = request.queryParams("aLagSize");
 			Date d = new Date();
 
 			endtime = format.format(d); // for ai-mysql

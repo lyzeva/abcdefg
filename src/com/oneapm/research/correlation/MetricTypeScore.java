@@ -2,6 +2,7 @@ package com.oneapm.research.correlation;
 
 import com.oneapm.research.correlation.web.Config;
 import com.oneapm.research.correlation.web.model.*;
+import com.oneapm.research.granger.*;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -13,8 +14,8 @@ import java.util.*;
  */
 public class MetricTypeScore {
 	private ArrayList<ArrayList<Double>> perThroughputBaseline = null;
-	private String applicationId = "10";
-	private String metricName = "CPU/";
+	private String applicationId;
+	private String metricName;
 	private String metricId;
 	private DataBaseConnection metricnameConnection = null, metricdataConnection = null;
 
@@ -87,7 +88,24 @@ public class MetricTypeScore {
 				ArrayList<ArrayList<Double>> num = getTimeserieById(metricIdBaseline);
 				ArrayList<IndependentNum> timeserieResults = new ArrayList<>();
 				for(int i=0; i<num.size(); i++) {
-					timeserieResults.add(PearsonCoefficientCalculate.calculatePearson(perThroughputBaseline.get(i), num.get(i)));
+					IndependentNum independentNum = new IndependentNum();
+					independentNum.timeserie = num.get(i);
+					ArrayList<Double> x = perThroughputBaseline.get(i), y = independentNum.timeserie;
+					independentNum.coefficient = PearsonCoefficientCalculate.calculatePearson(x, y);
+					GrangerCausalityStrategy_Bivariate grangerCalculator = new GrangerCausalityStrategy_Bivariate(Double.parseDouble(Config.CRITICAL_VALUE), Integer.parseInt(Config.aLagSize));
+					double a[] = new double[x.size()];
+					double b[] = new double[y.size()];
+
+					for(int j=0;j<a.length;j++){
+						a[j] = x.get(j);
+					}
+					for(int j=0;j<b.length;j++){
+						b[j] = y.get(j);
+					}
+					GrangerCausalIndicator grangerIndicator = grangerCalculator.apply(b,a);
+					if(grangerIndicator != null)
+						independentNum.granger = grangerIndicator.getpValue();
+					timeserieResults.add(independentNum);
 				}
 				tuple.num_result = timeserieResults;
 				resultModel.result.add(tuple);
@@ -98,7 +116,7 @@ public class MetricTypeScore {
 
 
     public ArrayList<ArrayList<Double> > getTimeserieById(int metricIdBaseline) throws SQLException {
-        ArrayList<ArrayList<Double>> result = new ArrayList<>();
+        ArrayList<ArrayList<Double>> result;
         String[] tables = {"metric_data_entity_pt1m_0", "metric_data_entity_pt1m_1", "metric_data_entity_pt1m_2", "metric_data_entity_pt1m_3", "metric_data_entity_pt1m_4"};
 
         Double minValue = Double.MAX_VALUE;

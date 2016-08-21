@@ -109,7 +109,27 @@ Ext.application({
                                     xtype:"textfield",
                                     id:"applicationid",
                                     width:300,
-                                    value:"10"
+                                    value:"11"
+                               },
+                               {
+                                    xtype:"label",
+                                    text:"CRITICAL_VALUE"
+                               },
+                               {
+                                    xtype:"textfield",
+                                    id:"grangerCRITICALVALUE",
+                                    width:300,
+                                    value:"0.85"
+                               },
+                               {
+                                    xtype:"label",
+                                    text:"Lag Size"
+                               },
+                               {
+                                    xtype:"textfield",
+                                    id:"aLagSize",
+                                    width:300,
+                                    value:"2"
                                },
 						        {
 						    	   xtype:"button",
@@ -134,7 +154,9 @@ Ext.application({
 														druidport:Ext.getCmp('druidport').value,
 														metricdataPath:Ext.getCmp('metricdataPath').value,
 														withpasttimedata:Ext.getCmp('withpasttimedata').value,
-														applicationid:Ext.getCmp('applicationid').value
+														applicationid:Ext.getCmp('applicationid').value,
+														grangerCRITICALVALUE: Ext.getCmp('grangerCRITICALVALUE').value,
+														aLagSize: Ext.getCmp('aLagSize').value
 													},
 													async : true,
 													success : function(response, options) {
@@ -146,7 +168,7 @@ Ext.application({
    													        var baseline = json['baselineNum'][i];
     														var data = [];
     													    for(var j=0;j<baseline.length;j++){
-    													        var record = { time: j, num: baseline[j]};
+    														        var record = { time: j, num: baseline[j]};
     													        data.push(record);
     													    }
     													    console.log(data);
@@ -171,11 +193,17 @@ Ext.application({
 														for(var i=0;i<jsonresult.length;i++){
 														    var record = { metricid: jsonresult[i]['metric_id'], metricname: jsonresult[i]['metric_name'],
 														                   cscore1: jsonresult[i]['num_result'][0]['coefficient'],
+														                   granger1: jsonresult[i]['num_result'][0]['granger'],
 														                   cscore2: jsonresult[i]['num_result'][1]['coefficient'],
+														                   granger2: jsonresult[i]['num_result'][1]['granger'],
 														                   cscore3: jsonresult[i]['num_result'][2]['coefficient'],
+														                   granger3: jsonresult[i]['num_result'][2]['granger'],
 														                   cscore4: jsonresult[i]['num_result'][3]['coefficient'],
+														                   granger4: jsonresult[i]['num_result'][3]['granger'],
 														                   cscore5: jsonresult[i]['num_result'][4]['coefficient'],
+														                   granger5: jsonresult[i]['num_result'][4]['granger'],
 														                   cscore6: jsonresult[i]['num_result'][5]['coefficient'],
+														                   granger6: jsonresult[i]['num_result'][5]['granger'],
 														                   nums: jsonresult[i]['num_result']};
 														    data.push(record);
 														}

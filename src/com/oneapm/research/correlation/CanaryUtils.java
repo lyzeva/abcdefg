@@ -38,8 +38,8 @@ public class CanaryUtils {
             return null;
         ArrayList<ArrayList<Double>> baselineValue = new ArrayList<>();
         ArrayList<String> baselineTime = new ArrayList<>();
-        int num = (Integer.parseInt(ed) - Integer.parseInt(st)) / 60;
         int dimen = 0;
+        int num = (Integer.parseInt(ed) - Integer.parseInt(st)) / 60 - 1;
         for (int i = 0; i < resBaseline.size(); ++i) {
             ResultSet rb = resBaseline.get(i);
 
@@ -76,9 +76,9 @@ public class CanaryUtils {
             ArrayList<Double> tmpB = new ArrayList<>();
             for (int j = 0; j < num; ++j) {
             	//when there isn't data in a certain timestamp
-        		if(j!=0 && j!=num-1 && !visited[j][i]){
-        			baseline[j][i] = (baseline[j-1][i]+baseline[j+1][i])/2;
-        		}
+//        		if(j!=0 && j!=num-1 && !visited[j][i]){
+//        			baseline[j][i] = (baseline[j-1][i]+baseline[j+1][i])/2;
+//        		}
                 tmpB.add(baseline[j][i]);
             }
             baselineValue.add(tmpB);
