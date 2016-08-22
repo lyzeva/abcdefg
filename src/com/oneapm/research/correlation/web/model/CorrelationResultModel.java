@@ -5,9 +5,6 @@ import com.oneapm.research.correlation.web.Config;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
-import java.util.Comparator;
 
 
 /**
@@ -35,31 +32,49 @@ public class CorrelationResultModel {
             throws IOException {
         int numData = result.size();
         if (numData < 1) return;
-        List<String[]> output_list = new ArrayList<>();
+        ArrayList<ArrayList<String>> output_list1 = new ArrayList<>();
+		ArrayList<ArrayList<String>> output_list2= new ArrayList<>();
 
-		String[] a_line = new String[8];
-		a_line[0] = "metricId";
-		a_line[1] = "metricName";
-		a_line[2] = "coefficient1";
-		a_line[3] = "coefficient2";
-		a_line[4] = "coefficient3";
-		a_line[5] = "coefficient4";
-		a_line[6] = "coefficient5";
-		a_line[7] = "coefficient6";
-		output_list.add(a_line);
-        for (int ii = 0; ii < numData; ++ii) {
-        	String[] b_line = new String[8];
-            b_line[0] = Integer.toString(result.get(ii).metric_id);
-            b_line[1] = result.get(ii).metric_name;
-            b_line[2] = Double.toString(result.get(ii).num_result.get(0).coefficient);
-			b_line[3] = Double.toString(result.get(ii).num_result.get(1).coefficient);
-			b_line[4] = Double.toString(result.get(ii).num_result.get(2).coefficient);
-			b_line[5] = Double.toString(result.get(ii).num_result.get(3).coefficient);
-			b_line[6] = Double.toString(result.get(ii).num_result.get(4).coefficient);
-			b_line[7] = Double.toString(result.get(ii).num_result.get(5).coefficient);
-            output_list.add(b_line);
+		ArrayList<String> a_line = new ArrayList<>();
+		a_line.add("metricId");
+		a_line.add("metricName");
+		a_line.add("coefficient1");
+		a_line.add("granger1");
+		a_line.add("coefficient2");
+		a_line.add("granger2");
+		a_line.add("coefficient3");
+		a_line.add("granger3");
+		a_line.add("coefficient4");
+		a_line.add("granger4");
+		a_line.add("coefficient5");
+		a_line.add("granger5");
+		a_line.add("coefficient6");
+		a_line.add("granger6");
+		output_list1.add(a_line);
+		a_line.clear();
+        for (CorrelationTuple tuple : result) {
+			ArrayList<String> list1_line = new ArrayList<>();
+            list1_line.add( Integer.toString(tuple.metric_id) );
+            list1_line.add( tuple.metric_name );
+			int count = 0;
+			for(IndependentNum independentnum : tuple.num_result){
+				list1_line.add( Double.toString(independentnum.coefficient) );
+				list1_line.add( Double.toString(independentnum.granger) );
+
+				ArrayList<String> list2_line = new ArrayList<>();
+				list2_line.add( Integer.toString(tuple.metric_id) );
+				list2_line.add( tuple.metric_name );
+				list2_line.add( "num" + (++count) );
+
+				for(Double timeserieValue : independentnum.timeserie){
+					list2_line.add( Double.toString(timeserieValue) );
+				}
+				output_list2.add(list2_line);
+			}
+            output_list1.add(list1_line);
         }
-        TestCommon.writeToFile(outputFilename, output_list);
+        TestCommon.writeToFile("scores", output_list1);
+		TestCommon.writeToFile("values", output_list2);
     }
 /*
 	public void sortList(){

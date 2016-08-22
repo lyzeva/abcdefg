@@ -4,6 +4,8 @@ import com.oneapm.research.correlation.web.Config;
 import com.oneapm.research.correlation.web.model.*;
 import com.oneapm.research.granger.*;
 
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
+import java.lang.Math;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,7 +48,7 @@ public class MetricTypeScore {
 
 	
 	
-	public boolean preparedPerThroughput(CorrelationResultModel resultModel) throws SQLException {
+	public boolean prepareRetrievedMetric(CorrelationResultModel resultModel) throws SQLException {
 		// WebTransaction
 		String selectMetricIdBaseline = "SELECT metric_id, metric_name from metric_name_entity_new where metric_name =\"" + metricName + "\" and application_id = " + applicationId;
 
@@ -65,7 +67,7 @@ public class MetricTypeScore {
 		}
 		
 
-//		HashMap<Integer, String> mapBaseline = CanaryUtils.getMetricIdFromResultSet(resultMetricIdBaseline);
+//		HashMap<Integer, String> mapBaseline = CorrelationUtils.getMetricIdFromResultSet(resultMetricIdBaseline);
 	}
 	
 	
@@ -75,7 +77,9 @@ public class MetricTypeScore {
 
 		ResultSet resultMetricIdBaseline = metricnameConnection.getResultForSql(selectMetricIdBaseline);
 
-		HashMap<Integer, String> mapBaseline = CanaryUtils.getMetricIdFromResultSet(resultMetricIdBaseline);
+		HashMap<Integer, String> mapBaseline = CorrelationUtils.getMetricIdFromResultSet(resultMetricIdBaseline);
+
+		PearsonsCorrelation pearsonCalculator = new PearsonsCorrelation();
 
 
 		for (Map.Entry<Integer, String> entry : mapBaseline.entrySet()){
@@ -86,29 +90,36 @@ public class MetricTypeScore {
 				tuple.metric_id = metricIdBaseline;
 				tuple.metric_name = key;
 				ArrayList<ArrayList<Double>> num = getTimeserieById(metricIdBaseline);
-				ArrayList<IndependentNum> timeserieResults = new ArrayList<>();
-				for(int i=0; i<num.size(); i++) {
-					IndependentNum independentNum = new IndependentNum();
-					independentNum.timeserie = num.get(i);
-					ArrayList<Double> x = perThroughputBaseline.get(i), y = independentNum.timeserie;
-					independentNum.coefficient = PearsonCoefficientCalculate.calculatePearson(x, y);
-					GrangerCausalityStrategy_Bivariate grangerCalculator = new GrangerCausalityStrategy_Bivariate(Double.parseDouble(Config.CRITICAL_VALUE), Integer.parseInt(Config.aLagSize));
-					double a[] = new double[x.size()];
-					double b[] = new double[y.size()];
+				if(num != null){
+					ArrayList<IndependentNum> timeserieResults = new ArrayList<>();
+					for(int i=0; i<num.size(); i++) {
+						IndependentNum independentNum = new IndependentNum();
+						independentNum.timeserie = num.get(i);
+						ArrayList<Double> x = perThroughputBaseline.get(i), y = independentNum.timeserie;
+						double a[] = new double[x.size()];
+						double b[] = new double[y.size()];
+						for(int j=0;j<a.length;j++){
+							a[j] = x.get(j);
+						}
+						for(int j=0;j<b.length;j++){
+							b[j] = y.get(j);
+						}
 
-					for(int j=0;j<a.length;j++){
-						a[j] = x.get(j);
+
+//						independentNum.coefficient = PearsonCoefficientCalculate.calculatePearson(x, y);
+						independentNum.coefficient = Math.abs(pearsonCalculator.correlation(a,b));
+
+						GrangerCausalityStrategy_Bivariate grangerCalculator = new GrangerCausalityStrategy_Bivariate(Double.parseDouble(Config.CRITICAL_VALUE), Integer.parseInt(Config.aLagSize));
+						//b为因，a为果;我们要找寻所有metric中导致查询metric的原因是什么
+						GrangerCausalIndicator grangerIndicator = grangerCalculator.apply(b,a);
+						if(grangerIndicator != null)
+							independentNum.granger = grangerIndicator.getpValue();
+
+						timeserieResults.add(independentNum);
 					}
-					for(int j=0;j<b.length;j++){
-						b[j] = y.get(j);
-					}
-					GrangerCausalIndicator grangerIndicator = grangerCalculator.apply(b,a);
-					if(grangerIndicator != null)
-						independentNum.granger = grangerIndicator.getpValue();
-					timeserieResults.add(independentNum);
+					tuple.num_result = timeserieResults;
+					resultModel.result.add(tuple);
 				}
-				tuple.num_result = timeserieResults;
-				resultModel.result.add(tuple);
 			}
 		}
 
@@ -124,7 +135,7 @@ public class MetricTypeScore {
             for (int i = 0; i < tables.length; ++i) {
                 String selectResult = "SELECT min(start_time_seconds) as num1 FROM " + tables[i];
                 ResultSet resultSet = metricdataConnection.getResultForSql(selectResult);
-                Double res =  CanaryUtils.getSingleValueFromResultSet(resultSet);
+                Double res =  CorrelationUtils.getSingleValueFromResultSet(resultSet);
                 if (res > 1 && res < minValue) {
                     minValue = res;
                     minIndex = i;
@@ -139,7 +150,7 @@ public class MetricTypeScore {
 
                 tmpBaseline.add(resultSetBaseline);
             }
-        result = CanaryUtils.getValueFromTimeResultSet(tmpBaseline, startTime, endTime);
+        result = CorrelationUtils.getValueFromTimeResultSet(tmpBaseline, startTime, endTime);
         return result;
     }
 

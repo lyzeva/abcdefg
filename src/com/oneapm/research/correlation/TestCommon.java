@@ -3,7 +3,6 @@ import com.google.common.base.Joiner;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ruan on 16-5-25.
@@ -43,11 +42,11 @@ public class TestCommon {
 //        writeToFile(outputFilename, output_list);
 //    }
 
-    public static void writeToFile(String outputFilename, List<String[]> output_list) throws IOException {
+    public static void writeToFile(String outputFilename, ArrayList<ArrayList<String>> output_list) throws IOException {
         File file = new File(outputFilename);
         OutputStream fop = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fop));
-        for (String[] element : output_list) {
+        for (ArrayList<String> element : output_list) {
             String csvLine = Joiner.on(",").join(element);
             writer.write(csvLine);
             writer.newLine();

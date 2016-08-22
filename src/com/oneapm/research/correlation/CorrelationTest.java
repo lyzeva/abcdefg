@@ -19,7 +19,7 @@ public class CorrelationTest {
 			metricTypeScore = new MetricTypeScore();
 			metricTypeScore.setStartTime(startTime);
 			metricTypeScore.setEndTime(endTime);
-			hasMetricName = metricTypeScore.preparedPerThroughput(currentResult);
+			hasMetricName = metricTypeScore.prepareRetrievedMetric(currentResult);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

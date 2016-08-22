@@ -9,9 +9,8 @@ import java.util.HashMap;
 /**
  * Created by ruan on 16-5-26.
  */
-public class CanaryUtils {
-    private CanaryUtils() {}
-
+public class CorrelationUtils {
+    private CorrelationUtils() {}
 
     public static ArrayList<ArrayList<Double>> getValueFromResultSet(ResultSet res) throws SQLException {
         if (res == null) {
@@ -23,7 +22,7 @@ public class CanaryUtils {
         int dimen = resultSetMetaData.getColumnCount() - 1;
         int count = 0;
         while (res.next()) {
-            ArrayList<Double> temp = new ArrayList<Double>();
+            ArrayList<Double> temp = new ArrayList<>();
             for (int i = 1; i <= dimen; ++i) {
                 temp.add(i - 1, res.getDouble(("num" + i)));
             }
@@ -62,28 +61,28 @@ public class CanaryUtils {
         }
 
         double[][] baseline = new double[num][dimen];
-        boolean[][] visited = new boolean[num][dimen];
         for (int i = 0; i < baselineTime.size(); ++i) {
             int pos = DisFromBegin(baselineTime.get(i), st);
             for (int j = 0; j < dimen; ++j) {
                 baseline[pos][j] = baselineValue.get(i).get(j);
-                visited[pos][j] = true;
             }
         }
 
         baselineValue.clear();
+        boolean hasNoneZeroValue = false;
         for (int i = 0; i < dimen; ++i) {
             ArrayList<Double> tmpB = new ArrayList<>();
             for (int j = 0; j < num; ++j) {
-            	//when there isn't data in a certain timestamp
-//        		if(j!=0 && j!=num-1 && !visited[j][i]){
-//        			baseline[j][i] = (baseline[j-1][i]+baseline[j+1][i])/2;
-//        		}
+                if(baseline[j][i] > 1e-10)
+                    hasNoneZeroValue = true;
                 tmpB.add(baseline[j][i]);
             }
             baselineValue.add(tmpB);
         }
-        return baselineValue;
+        if(hasNoneZeroValue)
+            return baselineValue;
+        else
+            return null;
     }
 
     private static int DisFromBegin(String end, String start) {
@@ -109,14 +108,6 @@ public class CanaryUtils {
         t2 = tmp;
     }
 
-    public static boolean containOnlyZero(double[] array) {
-        for (int i = 0; i < array.length; ++i) {
-            if (Math.abs(array[i]) > 1e-10)
-                return false;
-        }
-        return true;
-    }
-
     /***
      * Modified by zuowei on 2016-06-03
      * Calculate score without NO_DATA state.
@@ -124,48 +115,6 @@ public class CanaryUtils {
      * @param weightInGroups
      * @return
      */
-    public static Double calculateScore(double[] metricStatesCount, ArrayList<Double> weightInGroups) {
-        double score = 0.0;
-        if (metricStatesCount.length == weightInGroups.size()) {
-            int sumNumMetric = 0;
-            for (int i = 0; i < metricStatesCount.length; ++i) {
-                sumNumMetric += metricStatesCount[i];
-            }
-            for (int i = 0; i < metricStatesCount.length; ++i) {
-                score += (metricStatesCount[i] * weightInGroups.get(i));
-            }
-            if (sumNumMetric == 0)
-                return Double.NaN;//return 1;
-            return score / sumNumMetric;
-        }
-        return score;
-    }
-
-    public static double calculateCanaryScore(ArrayList<Double> oneCategoryScore, ArrayList<Double> weight) {
-        double score = 0.0;
-        double weightSum = 0.0;
-        if (oneCategoryScore.size() == weight.size()) {
-            for (int i = 0; i < oneCategoryScore.size(); ++i)
-                if(!oneCategoryScore.get(i).equals(Double.NaN)) {
-                    score += (oneCategoryScore.get(i) * weight.get(i));
-                    weightSum += weight.get(i);
-                }
-        }
-        return score / weightSum;
-    }
-
-    public static Double calculateScore(int categoryid, ArrayList<Double> metricStatesCount) {
-        if (metricStatesCount == null || metricStatesCount.size() < 1) return Double.NaN;
-        double score = 0.0;
-        int count = 0;
-        for (int i = 0; i < metricStatesCount.size(); ++i) {
-            if (!metricStatesCount.get(i).equals(Double.NaN)) {
-                ++count;
-                score += metricStatesCount.get(i);
-            }
-        }
-        return score / count;
-    }
 
 
     public static Double getSingleValueFromResultSet(ResultSet res) throws SQLException {
