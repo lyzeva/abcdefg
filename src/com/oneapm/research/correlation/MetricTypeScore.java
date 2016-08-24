@@ -110,7 +110,7 @@ public class MetricTypeScore {
 						independentNum.coefficient = Math.abs(pearsonCalculator.correlation(a,b));
 
 						GrangerCausalityStrategy_Bivariate grangerCalculator = new GrangerCausalityStrategy_Bivariate(Double.parseDouble(Config.CRITICAL_VALUE), Integer.parseInt(Config.aLagSize));
-						//b为因，a为果;我们要找寻所有metric中导致查询metric的原因是什么
+						//b为因，a为果;我们要找有metric中导致baselin metric的原因是什么
 						GrangerCausalIndicator grangerIndicator = grangerCalculator.apply(b,a);
 						if(grangerIndicator != null)
 							independentNum.granger = grangerIndicator.getpValue();
